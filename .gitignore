@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Local secrets — never commit tokens
+.env
+.env.*
+!.env.example
+*.local
