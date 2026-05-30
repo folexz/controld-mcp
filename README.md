@@ -135,11 +135,11 @@ npm run build-spec   # -> spec/controld-openapi.json
 ## Releasing (maintainers)
 
 Publishing to npm is automated by `.github/workflows/release.yml`, which runs on any pushed
-`vX.Y.Z` tag and publishes with [npm provenance](https://docs.npmjs.com/generating-provenance-statements).
+`vX.Y.Z` tag and publishes via [npm trusted publishing](https://docs.npmjs.com/trusted-publishers)
+(OIDC) — **no token or secret required**, with provenance generated automatically.
 
-One-time setup: add a repository secret `NPM_TOKEN` — a granular npm access token with publish
-rights to this package and **bypass-2FA** enabled (npmjs.com → Access Tokens → Granular /
-Automation token).
+One-time setup (on npmjs.com → package `controld-mcp` → Settings → Trusted Publisher): add a
+GitHub Actions publisher with repository `folexz/controld-mcp` and workflow `release.yml`.
 
 To cut a release:
 
@@ -149,6 +149,8 @@ npm version patch --no-git-tag-version   # edits package.json (+ lock); open a P
 # ...after the PR merges, on the updated main:
 git tag v0.1.1 && git push origin v0.1.1 # triggers the Release workflow -> npm publish
 ```
+
+The workflow fails fast if the tag doesn't match `package.json`'s version.
 
 Clients that registered with `controld-mcp@latest` pick up the new version on their next launch.
 
