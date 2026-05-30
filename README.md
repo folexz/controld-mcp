@@ -28,7 +28,12 @@ so coverage tracks the docs rather than being hand-maintained.
 - Node.js ≥ 18
 - A Control D API token (Read and/or Write), created at <https://controld.com/dashboard/api>
 
-## Install & build
+## Install
+
+The quickest path is via `npx` (no clone needed) — see the registration sections below,
+which run `npx -y controld-mcp`.
+
+To run from source instead:
 
 ```bash
 git clone https://github.com/folexz/controld-mcp.git
@@ -50,12 +55,16 @@ All auth is via environment variables, supplied by your MCP host. No files are r
 
 ## Register with Claude Code
 
+Via npx (recommended):
+
 ```bash
 claude mcp add controld --scope user \
   --env CONTROLD_API_TOKEN_READ=api.your_read_token \
   --env CONTROLD_API_TOKEN_WRITE=api.your_write_token \
-  -- node /absolute/path/to/controld-mcp/dist/index.js
+  -- npx -y controld-mcp
 ```
+
+Or from a local build, replace the command with `node /absolute/path/to/controld-mcp/dist/index.js`.
 
 Omit the `CONTROLD_API_TOKEN_WRITE` line to run in read-only mode.
 
@@ -65,8 +74,8 @@ Omit the `CONTROLD_API_TOKEN_WRITE` line to run in read-only mode.
 {
   "mcpServers": {
     "controld": {
-      "command": "node",
-      "args": ["/absolute/path/to/controld-mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "controld-mcp"],
       "env": {
         "CONTROLD_API_TOKEN_READ": "api.your_read_token",
         "CONTROLD_API_TOKEN_WRITE": "api.your_write_token"
