@@ -33,6 +33,15 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Verify tag matches package.json version
+        run: |
+          PKG=$(node -p "require('./package.json').version")
+          TAG="${GITHUB_REF_NAME#v}"
+          if [ "$PKG" != "$TAG" ]; then
+            echo "::error::Tag '$GITHUB_REF_NAME' does not match package.json version '$PKG'. Bump the version and re-tag."
+            exit 1
+          fi
+
       - name: Publish to npm
         run: npm publish --provenance --access public
         env:
