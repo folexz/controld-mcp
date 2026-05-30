@@ -70,10 +70,12 @@ Via npx (recommended):
 claude mcp add controld --scope user \
   --env CONTROLD_API_TOKEN_READ=api.your_read_token \
   --env CONTROLD_API_TOKEN_WRITE=api.your_write_token \
-  -- npx -y controld-mcp
+  -- npx -y controld-mcp@latest
 ```
 
-Or from a local build, replace the command with `node /absolute/path/to/controld-mcp/dist/index.js`.
+The `@latest` tag makes npx resolve the newest published version on each launch, so updates
+are picked up automatically (drop `@latest` to pin to whatever npx cached). Or from a local
+build, replace the command with `node /absolute/path/to/controld-mcp/dist/index.js`.
 
 Omit the `CONTROLD_API_TOKEN_WRITE` line to run in read-only mode.
 
@@ -84,7 +86,7 @@ Omit the `CONTROLD_API_TOKEN_WRITE` line to run in read-only mode.
   "mcpServers": {
     "controld": {
       "command": "npx",
-      "args": ["-y", "controld-mcp"],
+      "args": ["-y", "controld-mcp@latest"],
       "env": {
         "CONTROLD_API_TOKEN_READ": "api.your_read_token",
         "CONTROLD_API_TOKEN_WRITE": "api.your_write_token"
@@ -129,6 +131,26 @@ sources:
 ```bash
 npm run build-spec   # -> spec/controld-openapi.json
 ```
+
+## Releasing (maintainers)
+
+Publishing to npm is automated by `.github/workflows/release.yml`, which runs on any pushed
+`vX.Y.Z` tag and publishes with [npm provenance](https://docs.npmjs.com/generating-provenance-statements).
+
+One-time setup: add a repository secret `NPM_TOKEN` — a granular npm access token with publish
+rights to this package and **bypass-2FA** enabled (npmjs.com → Access Tokens → Granular /
+Automation token).
+
+To cut a release:
+
+```bash
+# main is protected, so bump the version via a PR, then tag the merged commit:
+npm version patch --no-git-tag-version   # edits package.json (+ lock); open a PR with this
+# ...after the PR merges, on the updated main:
+git tag v0.1.1 && git push origin v0.1.1 # triggers the Release workflow -> npm publish
+```
+
+Clients that registered with `controld-mcp@latest` pick up the new version on their next launch.
 
 ## Security notes
 
