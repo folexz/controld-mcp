@@ -1,6 +1,15 @@
 # controld-mcp
 
+[![npm version](https://img.shields.io/npm/v/controld-mcp.svg)](https://www.npmjs.com/package/controld-mcp)
+[![CI](https://github.com/folexz/controld-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/folexz/controld-mcp/actions/workflows/ci.yml)
+[![license](https://img.shields.io/npm/l/controld-mcp.svg)](./LICENSE)
+[![node](https://img.shields.io/node/v/controld-mcp.svg)](https://nodejs.org)
+
 An [MCP](https://modelcontextprotocol.io) server for the [Control D](https://controld.com) API.
+
+```bash
+npx -y controld-mcp   # configured via CONTROLD_API_TOKEN_READ / _WRITE env vars
+```
 
 It exposes the full documented Control D Public API (profiles, filters, custom rules, rule
 folders, services, devices, access lists, analytics, billing, organizations, account) as MCP

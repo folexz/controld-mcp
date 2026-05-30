@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Rebuild spec and verify it is committed
+        run: |
+          npm run build-spec
+          git diff --exit-code spec/controld-openapi.json \
+            || (echo "::error::spec/controld-openapi.json is out of date — run 'npm run build-spec' and commit" && exit 1)
+
+      - name: Type-check & compile
+        run: npm run build
